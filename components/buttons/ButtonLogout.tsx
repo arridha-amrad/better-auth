@@ -1,7 +1,7 @@
 "use client";
 
 import { signOut } from "@/lib/auth-client";
-import { DropdownMenuItem } from "./ui/dropdown-menu";
+import { DropdownMenuItem } from "../ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 
 export default function ButtonLogout() {

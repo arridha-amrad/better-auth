@@ -43,6 +43,7 @@ export const sendEmail = async ({
   text: string;
 }) => {
   await transporter.sendMail({
+    from: "Better-Auth",
     to,
     subject,
     text,

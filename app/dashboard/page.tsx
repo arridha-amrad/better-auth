@@ -1,5 +1,5 @@
-import ButtonLogout from "@/components/ButtonLogout";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import ButtonLogout from "@/components/buttons/ButtonLogout";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -32,6 +32,10 @@ export default async function DashboardPage() {
           <CardHeader>
             <CardTitle>
               <Avatar className="size-15">
+                <AvatarImage
+                  src={session.user.image ?? undefined}
+                  alt="Avatar"
+                />
                 <AvatarFallback>JD</AvatarFallback>
               </Avatar>
             </CardTitle>

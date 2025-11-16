@@ -29,10 +29,6 @@ export const auth = betterAuth({
         text: `Click the link to reset your password: ${url}`,
       });
     },
-    onPasswordReset: async ({ user }, request) => {
-      // your logic here
-      console.log(`Password for user ${user.email} has been reset.`);
-    },
   },
   emailVerification: {
     sendOnSignUp: true,
@@ -43,6 +39,13 @@ export const auth = betterAuth({
         subject: "Verify your email address",
         text: `Click the link to verify your email: ${url}`,
       });
+    },
+  },
+  socialProviders: {
+    google: {
+      enabled: true,
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
   },
 });

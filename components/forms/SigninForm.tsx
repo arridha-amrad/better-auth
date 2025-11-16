@@ -8,6 +8,7 @@ import { Spinner } from "../ui/spinner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { sendVerificationEmail, signIn } from "@/lib/auth-client";
+import ButtonOAuthGoogle from "../buttons/ButtonOauthGoogle";
 
 export default function SigninForm() {
   const router = useRouter();
@@ -148,6 +149,9 @@ export default function SigninForm() {
           <Link className="hover:underline" href="/sign-up">
             Sign up
           </Link>
+        </div>
+        <div className="my-4">
+          <ButtonOAuthGoogle />
         </div>
       </form>
     </fieldset>
