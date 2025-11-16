@@ -12,6 +12,7 @@ import { signUp } from "@/lib/auth-client";
 export default function SignupForm() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -24,17 +25,20 @@ export default function SignupForm() {
         name: formData.get("name") as string,
         email: formData.get("email") as string,
         password: formData.get("password") as string,
+        callbackURL: "/dashboard",
       },
       {
         onRequest: () => {
           setLoading(true);
         },
-        onSuccess: () => {
-          router.push("/dashboard");
+        onSuccess: ({ data }) => {
+          setMessage("Please verify your email");
         },
         onError: ({ error }) => {
-          setLoading(false);
           setError(error.message || "Something went wrong.");
+        },
+        onResponse: () => {
+          setLoading(false);
         },
       }
     );
@@ -53,6 +57,11 @@ export default function SignupForm() {
         {error && (
           <div className="mb-4">
             <p className="text-red-400 text-sm">{error}</p>
+          </div>
+        )}
+        {message && (
+          <div className="mb-4">
+            <p className="text-green-400 text-sm">{message}</p>
           </div>
         )}
 

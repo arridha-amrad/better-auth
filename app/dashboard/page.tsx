@@ -24,7 +24,6 @@ export default async function DashboardPage() {
   if (!session) {
     return unauthorized();
   }
-  console.log({ session });
 
   return (
     <main className="container mx-auto">

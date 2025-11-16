@@ -7,23 +7,26 @@ import Link from "next/link";
 import { Spinner } from "../ui/spinner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { signIn } from "@/lib/auth-client";
+import { sendVerificationEmail, signIn } from "@/lib/auth-client";
 
 export default function SigninForm() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showVerify, setShowVerify] = useState(false);
+  const [isSendVerification, setIsSendVerification] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
-
     const formData = new FormData(e.currentTarget);
-
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
     await signIn.email(
       {
-        email: formData.get("email") as string,
-        password: formData.get("password") as string,
+        email,
+        password,
       },
       {
         onRequest: () => {
@@ -33,12 +36,45 @@ export default function SigninForm() {
           router.push("/dashboard");
         },
         onError: ({ error }) => {
+          localStorage.setItem("email", email);
           setLoading(false);
+          // Handle error of unverified email
+          if (error.status === 403) {
+            setShowVerify(true);
+            return;
+          }
+          //you can also show the original error message
           setError(error.message || "Something went wrong.");
         },
       }
     );
   }
+
+  const resendVerification = async () => {
+    await sendVerificationEmail(
+      {
+        email: localStorage.getItem("email") as string,
+        callbackURL: "/dashboard",
+      },
+      {
+        onRequest: () => {
+          setIsSendVerification(true);
+        },
+        onError: ({ error }) => {
+          setShowVerify(false);
+          setError(error.message);
+        },
+        onSuccess: () => {
+          setShowVerify(false);
+          setMessage("Please check your email inbox");
+        },
+        onResponse: () => {
+          setIsSendVerification(false);
+        },
+      }
+    );
+  };
+
   return (
     <fieldset
       className="w-full max-w-md border p-8 rounded-xl"
@@ -52,6 +88,28 @@ export default function SigninForm() {
         {error && (
           <div className="mb-4">
             <p className="text-red-400 text-sm">{error}</p>
+          </div>
+        )}
+
+        {message && (
+          <div className="mb-4">
+            <p className="text-green-400 text-sm">{message}</p>
+          </div>
+        )}
+
+        {showVerify && (
+          <div className="mb-4 flex justify-between">
+            <p className="text-red-400 text-sm">Verification required</p>
+            <Button
+              disabled={isSendVerification}
+              type="button"
+              onClick={resendVerification}
+              size="sm"
+              variant="secondary"
+            >
+              {isSendVerification && <Spinner />}
+              Resend Verification
+            </Button>
           </div>
         )}
 
