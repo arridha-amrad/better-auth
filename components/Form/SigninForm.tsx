@@ -119,7 +119,12 @@ export default function SigninForm() {
             <Input type="email" id="email" name="email" placeholder="Email" />
           </div>
           <div className="grid w-full max-w-sm items-center gap-3">
-            <Label htmlFor="email">Password</Label>
+            <div className="flex justify-between">
+              <Label htmlFor="email">Password</Label>
+              <Link className="text-sm font-medium" href={"/forgot-password"}>
+                forgot password
+              </Link>
+            </div>
             <Input
               type="password"
               id="password"
