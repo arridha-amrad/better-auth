@@ -6,11 +6,9 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Spinner } from "../ui/spinner";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { signUp } from "@/lib/auth-client";
 
 export default function SignupForm() {
-  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -25,13 +23,14 @@ export default function SignupForm() {
         name: formData.get("name") as string,
         email: formData.get("email") as string,
         password: formData.get("password") as string,
+        username: formData.get("username") as string,
         callbackURL: "/dashboard",
       },
       {
         onRequest: () => {
           setLoading(true);
         },
-        onSuccess: ({ data }) => {
+        onSuccess: () => {
           setMessage("Please verify your email");
         },
         onError: ({ error }) => {
@@ -40,7 +39,7 @@ export default function SignupForm() {
         onResponse: () => {
           setLoading(false);
         },
-      }
+      },
     );
   }
 
@@ -69,6 +68,10 @@ export default function SignupForm() {
           <div className="grid w-full max-w-sm items-center gap-3">
             <Label htmlFor="name">Name</Label>
             <Input type="text" id="name" name="name" placeholder="Name" />
+          </div>
+          <div className="grid w-full max-w-sm items-center gap-3">
+            <Label htmlFor="username">Name</Label>
+            <Input type="text" id="username" name="username" placeholder="Username" />
           </div>
           <div className="grid w-full max-w-sm items-center gap-3">
             <Label htmlFor="email">Email</Label>

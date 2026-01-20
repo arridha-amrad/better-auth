@@ -1,3 +1,4 @@
+
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
@@ -5,7 +6,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -14,14 +14,16 @@ model User {
   email         String
   emailVerified Boolean   @default(false)
   image         String?
-  role          String?   @default("user")
   createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now()) @updatedAt
+  updatedAt     DateTime  @updatedAt
+  role          String?   @default("user")
+  username      String
   sessions      Session[]
   accounts      Account[]
 
   @@unique([email])
-  @@map("users")
+  @@unique([username])
+  @@map("user")
 }
 
 model Session {
@@ -36,7 +38,8 @@ model Session {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([token])
-  @@map("sessions")
+  @@index([userId])
+  @@map("session")
 }
 
 model Account {
@@ -55,7 +58,8 @@ model Account {
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
 
-  @@map("accounts")
+  @@index([userId])
+  @@map("account")
 }
 
 model Verification {
@@ -64,7 +68,8 @@ model Verification {
   value      String
   expiresAt  DateTime
   createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now()) @updatedAt
+  updatedAt  DateTime @updatedAt
 
-  @@map("verifications")
+  @@index([identifier])
+  @@map("verification")
 }

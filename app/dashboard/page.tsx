@@ -54,24 +54,10 @@ export default async function DashboardPage() {
             </CardAction>
           </CardHeader>
           <CardContent>
-            <div className="flex">
-              <div className="w-15">Name</div>
-              <p>
-                : <span className="pl-4">{session.user.name}</span>
-              </p>
-            </div>
-            <div className="flex">
-              <div className="w-15">Email</div>
-              <p>
-                : <span className="pl-4">{session.user.email}</span>
-              </p>
-            </div>
-            <div className="flex">
-              <div className="w-15">Role</div>
-              <p>
-                : <span className="pl-4">{session.user.role}</span>
-              </p>
-            </div>
+            <p>Name : {session.user.name}</p>
+            <p>Username : {session.user.username}</p>
+            <p>Email : {session.user.email}</p>
+            <p>Role : {session.user.role}</p>
           </CardContent>
         </Card>
       </div>

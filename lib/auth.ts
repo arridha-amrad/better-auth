@@ -14,6 +14,12 @@ export const auth = betterAuth({
         input: false,
         defaultValue: "user",
       },
+      username: {
+        type: "string",
+        required: true,
+        input: true,
+        unique: true,
+      },
     },
   },
   database: prismaAdapter(prisma, {
@@ -46,6 +52,12 @@ export const auth = betterAuth({
       enabled: true,
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      prompt: "select_account",
+      mapProfileToUser(profile) {
+        return {
+          username: profile.email.split("@")[0].toLowerCase(),
+        };
+      },
     },
   },
 });
